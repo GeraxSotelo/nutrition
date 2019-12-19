@@ -19,7 +19,9 @@ let _foodApi = axios.create({
 export default new Vuex.Store({
   state: {
     logs: [],
-    activeLog: {}
+    activeLog: {},
+    results: [],
+    savedFoods: []
   },
   mutations: {
     addLog(state, data) {
@@ -31,6 +33,9 @@ export default new Vuex.Store({
     },
     setActiveLog(state, data) {
       state.activeLog = data
+    },
+    search(state, data) {
+      state.results = data
     }
 
   },
@@ -47,6 +52,12 @@ export default new Vuex.Store({
     async setActiveLog({ commit, dispatch }, id) {
       let res = await _sandboxApi.get(id)
       commit("setActiveLog", res.data.data)
+    },
+    async search({ commit, dispatch }, query) {
+      let queryObj = { query: query }
+      let res = await _foodApi.post("", queryObj)
+      console.log(res.data)
+      commit("search", res.data)
     }
   },
   modules: {
